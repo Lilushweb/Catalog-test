@@ -33,6 +33,20 @@ const form = reactive<ProductPayload>({
 
 const isEditMode = computed(() => Boolean(props.productId));
 
+function normalizePriceInput(value: string | number) {
+    const normalized = String(value).replace(',', '.').replace(/[^\d.]/g, '');
+    const [integerPart = '', ...rest] = normalized.split('.');
+    const decimalPart = rest.join('').slice(0, 2);
+
+    return decimalPart ? `${integerPart}.${decimalPart}` : integerPart;
+}
+
+function handlePriceInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    form.price = normalizePriceInput(target.value);
+    target.value = String(form.price);
+}
+
 function validateClient() {
     const errors: Record<string, string[]> = {};
 
@@ -46,6 +60,10 @@ function validateClient() {
 
     if (Number(form.price) <= 0) {
         errors.price = ['Цена должна быть больше 0.'];
+    }
+
+    if (!/^\d+(\.\d{1,2})?$/.test(String(form.price))) {
+        errors.price = ['Цена должна содержать не более 2 знаков после запятой.'];
     }
 
     fieldErrors.value = errors;
@@ -185,7 +203,16 @@ onMounted(loadPageData);
 
                         <div class="grid gap-2">
                             <Label for="price">Цена</Label>
-                            <Input id="price" v-model="form.price" type="number" min="0.01" step="0.01" required />
+                            <Input
+                                id="price"
+                                v-model="form.price"
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                inputmode="decimal"
+                                required
+                                @input="handlePriceInput"
+                            />
                             <InputError :message="fieldErrors.price?.[0]" />
                         </div>
 
@@ -209,7 +236,7 @@ onMounted(loadPageData);
                                 {{ isSubmitting ? 'Сохранение...' : 'Сохранить товар' }}
                             </Button>
                             <Link :href="route('admin.products.index')">
-                                <Button type="button" variant="outline" class="border-stone-300 bg-white">Отмена</Button>
+                                <Button type="button" variant="outline" class="border-stone-300 bg-white text-stone-600">Отмена</Button>
                             </Link>
                         </div>
                     </form>

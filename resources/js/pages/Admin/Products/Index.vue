@@ -144,11 +144,7 @@ async function handleLogout() {
             </div>
 
             <div class="grid gap-4">
-                <Card
-                    v-for="product in products?.data"
-                    :key="product.id"
-                    class="rounded-3xl border-stone-200 bg-white shadow-sm"
-                >
+                <Card v-for="product in products?.data" :key="product.id" class="rounded-3xl border-stone-200 bg-white shadow-sm">
                     <CardHeader class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                         <div>
                             <p class="text-xs uppercase tracking-[0.22em] text-amber-700">
@@ -165,7 +161,7 @@ async function handleLogout() {
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <Link :href="`/admin/products/${product.id}/edit`">
-                                    <Button variant="outline" class="border-stone-300 bg-white">Редактировать</Button>
+                                    <Button variant="outline" class="border-stone-300 bg-white text-stone-600">Редактировать</Button>
                                 </Link>
                                 <Button
                                     variant="outline"
@@ -186,7 +182,10 @@ async function handleLogout() {
                 </Card>
             </div>
 
-            <div v-if="!isLoading && (products?.data.length ?? 0) === 0" class="rounded-3xl border border-dashed border-stone-300 bg-white px-6 py-10 text-center text-stone-500">
+            <div
+                v-if="!isLoading && (products?.data.length ?? 0) === 0"
+                class="rounded-3xl border border-dashed border-stone-300 bg-white px-6 py-10 text-center text-stone-500"
+            >
                 Товары не найдены.
             </div>
 
@@ -194,10 +193,13 @@ async function handleLogout() {
                 <Button variant="outline" class="border-stone-300 bg-white" :disabled="currentPage <= 1" @click="loadProducts(currentPage - 1)">
                     Назад
                 </Button>
-                <span class="rounded-md bg-white px-4 py-2 text-sm text-stone-700 shadow-sm">
-                    Страница {{ currentPage }} из {{ lastPage }}
-                </span>
-                <Button variant="outline" class="border-stone-300 bg-white" :disabled="currentPage >= lastPage" @click="loadProducts(currentPage + 1)">
+                <span class="rounded-md bg-white px-4 py-2 text-sm text-stone-700 shadow-sm"> Страница {{ currentPage }} из {{ lastPage }} </span>
+                <Button
+                    variant="outline"
+                    class="border-stone-300 bg-white"
+                    :disabled="currentPage >= lastPage"
+                    @click="loadProducts(currentPage + 1)"
+                >
                     Вперед
                 </Button>
             </div>

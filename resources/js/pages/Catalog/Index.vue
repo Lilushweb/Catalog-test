@@ -54,20 +54,22 @@ onMounted(async () => {
 <template>
     <Head title="Каталог товаров" />
 
-    <div class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(217,119,6,0.14),_transparent_32%),linear-gradient(180deg,_#fffdf7_0%,_#f5efe3_100%)]">
+    <div
+        class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(217,119,6,0.14),_transparent_32%),linear-gradient(180deg,_#fffdf7_0%,_#f5efe3_100%)]"
+    >
         <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-            <header class="mb-8 flex flex-col gap-4 rounded-3xl border border-amber-200/70 bg-white/80 p-6 shadow-sm backdrop-blur sm:flex-row sm:items-end sm:justify-between">
+            <header
+                class="mb-8 flex flex-col gap-4 rounded-3xl border border-amber-200/70 bg-white/80 p-6 shadow-sm backdrop-blur sm:flex-row sm:items-end sm:justify-between"
+            >
                 <div>
                     <p class="text-sm uppercase tracking-[0.28em] text-amber-700">Catalog</p>
                     <h1 class="mt-2 font-serif text-4xl text-stone-900">Товары и категории</h1>
-                    <p class="mt-3 max-w-2xl text-sm text-stone-600">
-                        Публичный каталог товаров с пагинацией и фильтрацией по категории.
-                    </p>
+                    <p class="mt-3 max-w-2xl text-sm text-stone-600">Публичный каталог товаров с пагинацией и фильтрацией по категории.</p>
                 </div>
 
                 <div class="flex items-center gap-3">
                     <Link :href="route('admin.login')">
-                        <Button variant="outline" class="border-stone-300 bg-white">Вход для администратора</Button>
+                        <Button variant="outline" class="border-stone-300 bg-white text-stone-900">Вход для администратора</Button>
                     </Link>
                 </div>
             </header>
@@ -75,9 +77,7 @@ onMounted(async () => {
             <section class="mb-6 grid gap-4 rounded-3xl border border-stone-200 bg-white p-5 shadow-sm md:grid-cols-[1fr_280px]">
                 <div>
                     <p class="text-sm font-medium text-stone-700">Товары</p>
-                    <p class="text-sm text-stone-500">
-                        Найдено: {{ products?.meta.total ?? 0 }}.
-                    </p>
+                    <p class="text-sm text-stone-500">Найдено: {{ products?.meta.total ?? 0 }}.</p>
                 </div>
 
                 <label class="grid gap-2 text-sm text-stone-600">
@@ -139,21 +139,17 @@ onMounted(async () => {
             <div v-if="products && lastPage > 1" class="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <Button
                     variant="outline"
-                    class="border-stone-300 bg-white"
+                    class="border-stone-300 bg-white text-stone-500"
                     :disabled="currentPage <= 1 || isLoading"
                     @click="loadProducts(currentPage - 1)"
                 >
                     Назад
                 </Button>
-                <Input
-                    :model-value="String(currentPage)"
-                    readonly
-                    class="w-20 border-stone-300 bg-white text-center"
-                />
+                <Input :model-value="String(currentPage)" readonly class="w-20 border-stone-300 bg-white text-center text-stone-500" />
                 <span class="text-sm text-stone-500">из {{ lastPage }}</span>
                 <Button
                     variant="outline"
-                    class="border-stone-300 bg-white"
+                    class="border-stone-300 bg-white text-stone-500"
                     :disabled="currentPage >= lastPage || isLoading"
                     @click="loadProducts(currentPage + 1)"
                 >
