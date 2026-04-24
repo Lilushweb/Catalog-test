@@ -1,0 +1,62 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-984}
+    container_name: catalog_app
+    restart: unless-stopped
+    user: ${UID:-1000}:${GID:-984}
+    working_dir: /var/www
+    environment:
+      HOME: /tmp
+      NPM_CONFIG_CACHE: /tmp/.npm
+    volumes:
+      - ./:/var/www
+    ports:
+      - "5173-5180:5173-5180"
+    depends_on:
+      - db
+    networks:
+      - catalog
+
+  nginx:
+    image: nginx:latest
+    container_name: catalog_nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - catalog
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  db:
+    image: postgres:15
+    container_name: catalog_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: building
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - catalog
+
+
+volumes:
+  db_data:
+
+networks:
+  catalog:
